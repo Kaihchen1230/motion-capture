@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import socketIOClient from 'socket.io-client';
 import Webcam from 'react-webcam';
-const ENDPOINT = 'https://b8e040a28c69.ngrok.io';
+const ENDPOINT = 'http://localhost:5000';
 
 const Client = (props) => {
 	const webCamRef = useRef(null);
@@ -24,19 +24,24 @@ const Client = (props) => {
 				if (frame && frame.indexOf('data:image/jpeg') !== -1) {
 					frame = frame.replace(/^data:image\/jpeg;base64,/, '');
 					if (frame && frame !== '') {
-						console.log('this is first time: ', firstTime);
+						// console.log(
+						// 	'this is res: ',
+						// 	response,
+						// 	' and this is length: ',
+						// 	response.length,
+						// );
+						console.log('this is props start: ', props.start);
 						socket.emit('frame', {
 							b64: frame,
-							status: firstTime,
+							status: props.start,
 							width: 1080,
 							height: 1080,
 						});
 					}
 				}
-			}, 100);
+			}, 10000 / 40);
 		});
 		setFirstTime(true);
-		console.log('this is first time outside: ', firstTime);
 		socket.on('response', function (res) {
 			console.log(res);
 			setResponse(`data:image/jpeg;base64,${res.b64}`);
@@ -49,7 +54,6 @@ const Client = (props) => {
 		};
 	}, [props]);
 
-	console.log('render');
 	return (
 		<div>
 			<img src={response} alt='' />
