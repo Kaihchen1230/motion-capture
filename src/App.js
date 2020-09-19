@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Client from './Client';
 
 function App() {
-	const [loadClient, setLoadClient] = useState(true);
+	const [loadClient, setLoadClient] = useState(false);
 
 	return (
 		<div className='App'>
@@ -10,7 +10,7 @@ function App() {
 				{loadClient ? 'Stop' : 'Start'}
 			</button>
 			{/* SOCKET IO CLIENT*/}
-			{loadClient ? <Client /> : null}
+			{loadClient ? <Client loadClient={loadClient} /> : null}
 			{/* <Client loadClient={loadClient} /> */}
 		</div>
 	);
