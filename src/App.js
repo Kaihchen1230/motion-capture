@@ -1,26 +1,56 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef, useState } from 'react';
+import Webcam from 'react-webcam';
+import socketIOClient from 'socket.io-client';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const webCamRef = useRef(null);
+
+	const [capturedImageUrl, setCapturedImageUrl] = useState([]);
+	let myInterval;
+
+	const videoConstraints = {
+		facingMode: 'user',
+	};
+
+	const onStartCapture = () => {
+		let imgLists = [];
+		myInterval = setInterval(() => {
+			const img = webCamRef.current.getScreenshot();
+
+			setCapturedImageUrl((prevState) => [...prevState, img]);
+			// imgLists.push(img);
+			// console.log('this is list: ', imgLists);
+		}, 900);
+	};
+
+	const onStopCapture = () => {
+		clearInterval(myInterval);
+		console.log('this is capture: ', capturedImageUrl);
+	};
+
+	const imageArea = capturedImageUrl.map((imgUrl) => {
+		return (
+			<li key={imgUrl}>
+				<img src={imgUrl} alt='' />
+			</li>
+		);
+	});
+
+	return (
+		<div className='App'>
+			<Webcam
+				audio={false}
+				height={240}
+				width={320}
+				ref={webCamRef}
+				screenshotFormat='image/jpeg'
+				videoConstraints={videoConstraints}
+			/>
+			<ul>{imageArea}</ul>
+			<button onClick={onStartCapture}>Start</button>
+			<button onClick={onStopCapture}>Stop</button>
+		</div>
+	);
 }
 
 export default App;
