@@ -30,7 +30,7 @@ const Client = (props) => {
 						// 	' and this is length: ',
 						// 	response.length,
 						// );
-						console.log('this is props start: ', props.start);
+						console.log('this is props.start: ', props.start);
 						socket.emit('frame', {
 							b64: frame,
 							status: props.start,
@@ -52,15 +52,15 @@ const Client = (props) => {
 			socket.disconnect();
 			clearInterval(myInterval);
 		};
-	}, [props]);
-
+	}, [props.start]);
+	// console.log('this is response.length before return: ', response.length);
 	return (
 		<div>
 			<img src={response} alt='' />
 			<Webcam
 				audio={false}
-				height={1080}
-				width={1080}
+				height={response.length > 0 ? 0 : 1080}
+				width={response.length > 0 ? 0 : 1080}
 				ref={webCamRef}
 				screenshotFormat='image/jpeg'
 				videoConstraints={videoConstraints}

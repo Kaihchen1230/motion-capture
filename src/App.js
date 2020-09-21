@@ -2,20 +2,32 @@ import React, { useState } from 'react';
 import Client from './Client';
 
 function App() {
-	const [loadClient, setLoadClient] = useState(true);
-	const [start, setStart] = useState(false);
+	const [loadWebCam, setLoadWebCam] = useState(true);
+	const [stopStreaming, setStopStreaming] = useState(false);
 
-	const handleClick = () => {
-		setLoadClient(!loadClient);
-		setStart(!start);
+	const handleStart = () => {
+		setLoadWebCam(false);
+		setStopStreaming(false);
+	};
+
+	const handleStopStreaming = () => {
+		setStopStreaming(true);
+		setLoadWebCam(true);
 	};
 
 	return (
 		<div className='App'>
-			<button onClick={handleClick}>start</button>
+			{loadWebCam ? (
+				<button onClick={handleStart}>Start</button>
+			) : (
+				<button onClick={handleStopStreaming}>Stop</button>
+			)}
+
+			{/* <button onClick={ handleClick }>start</button> */}
+
 			{/* SOCKET IO CLIENT*/}
 			{/* {loadClient ? <Client loadClient={loadClient} /> : null} */}
-			<Client start={start} />
+			{!stopStreaming ? <Client start={!loadWebCam} /> : null}
 		</div>
 	);
 }
