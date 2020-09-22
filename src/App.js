@@ -1,40 +1,42 @@
 import React, { useState } from 'react';
+import { Row, Col, Button } from 'antd';
 import Client from './Client';
 
+import 'antd/dist/antd.css';
+import './App.css';
 
 function App() {
-	const [loadWebCam, setLoadWebCam] = useState(true);
 	const [stopStreaming, setStopStreaming] = useState(false);
 
-	const handleStart = () => {
-		setLoadWebCam(false);
-		setStopStreaming(false);
-	};
-
-	const handleStopStreaming = () => {
-		setStopStreaming((prevState) => !prevState);
-		setLoadWebCam(true);
-	};
+	const webcamOff = (
+		<div>
+			<center>
+				<span id='Number'>Webcam is off</span>
+			</center>
+		</div>
+	);
 
 	return (
 		<div className='App'>
-			{/* {loadWebCam ? (
-				<button onClick={handleStart}>Start</button>
-			) : (
-				<button onClick={handleStopStreaming}>Stop</button>
-				) } */}
+			<Row type='flex' align='middle' style={{ paddingTop: '20px' }}>
+				<Col
+					span={24}
+					style={{
+						display: 'inline-flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<Button
+						type='primary'
+						onClick={() => {
+							setStopStreaming((prevState) => !prevState);
+						}}>
+						{!stopStreaming ? 'stop' : 'start'}
+					</Button>
+				</Col>
+			</Row>
 
-			<button onClick={handleStopStreaming}>
-				{!stopStreaming ? 'stop' : 'start'}
-			</button>
-
-			{/* <button onClick={handleStopStreaming}>Stop</button> */}
-
-			{/* <button onClick={ handleClick }>start</button> */}
-
-			{/* SOCKET IO CLIENT*/}
-			{/* {loadClient ? <Client loadClient={loadClient} /> : null} */}
-			{!stopStreaming ? <Client start={!loadWebCam} /> : null}
+			{!stopStreaming ? <Client /> : webcamOff}
 		</div>
 	);
 }

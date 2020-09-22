@@ -19,54 +19,44 @@ const Client = (props) => {
 		facingMode: 'user',
 	};
 
-	// useEffect(() => {
-	// 	console.log('this is useeff');
-	// 	let socket = socketIOClient(ENDPOINT);
+	useEffect(() => {
+		let socket = socketIOClient(ENDPOINT);
 
-	// 	let myInterval = null;
+		let myInterval = null;
 
-	// 	socket.on('connect', () => {
-	// 		myInterval = setInterval(() => {
-	// 			let frame = webCamRef.current.getScreenshot();
-	// 			// console.log('tis is frame: ', frame);
-	// 			if (frame && frame.indexOf('data:image/jpeg') !== -1) {
-	// 				frame = frame.replace(/^data:image\/jpeg;base64,/, '');
-	// 				if (frame && frame !== '') {
-	// 					// console.log(
-	// 					// 	'this is res: ',
-	// 					// 	screenshot,
-	// 					// 	' and this is length: ',
-	// 					// 	screenshot.length,
-	// 					// );
-	// 					console.log('this is props.start: ', props.start);
-	// 					socket.emit('frame', {
-	// 						b64: frame,
-	// 						status: screenshot.length > 0,
-	// 						width: 1080,
-	// 						height: 1080,
-	// 					});
-	// 				}
-	// 			}
-	// 		}, 10000 / 40);
-	// 	});
+		socket.on('connect', () => {
+			myInterval = setInterval(() => {
+				let frame = webCamRef.current.getScreenshot();
+				if (frame && frame.indexOf('data:image/jpeg') !== -1) {
+					frame = frame.replace(/^data:image\/jpeg;base64,/, '');
+					if (frame && frame !== '') {
+						socket.emit('frame', {
+							b64: frame,
+							status: screenshot.length > 0,
+							width: 1080,
+							height: 1080,
+						});
+					}
+				}
+			}, 10000 / 40);
+		});
 
-	// 	socket.on('response', function (res) {
-	// 		console.log(res);
-	// 		setScreenshot(`data:image/jpeg;base64,${res.b64}`);
-	// 		setDirection(res.res);
-	// 	});
+		socket.on('response', function (res) {
+			console.log(res);
+			setScreenshot(`data:image/jpeg;base64,${res.b64}`);
+			setDirection(res.res);
+		});
 
-	// 	return () => {
-	// 		socket.disconnect();
-	// 		clearInterval(myInterval);
-	// 	};
-	// }, [screenshot]);
-	// console.log('this is screenshot.length before return: ', screenshot.length);
+		return () => {
+			socket.disconnect();
+			clearInterval(myInterval);
+		};
+	}, [screenshot]);
 	return (
 		<div>
-			<p>{direction}</p>
 			<Row>
-				<Col span={24}>
+				<Col span={6} />
+				<Col span={12}>
 					<CaretUpFilled
 						style={{
 							display: 'flex',
@@ -74,10 +64,14 @@ const Client = (props) => {
 							justifyContent: 'space-around',
 							fontSize: '8em',
 							height: '100%',
+							color:
+								direction === 'up' ? 'rgb(17 193 37)' : 'rgba(0, 0, 0, 0.85)',
 						}}
 					/>
 				</Col>
-				<Col span={4}>
+				<Col span={6} />
+				<Col span={4} />
+				<Col span={2}>
 					<CaretLeftFilled
 						style={{
 							display: 'flex',
@@ -85,10 +79,12 @@ const Client = (props) => {
 							justifyContent: 'space-around',
 							fontSize: '8em',
 							height: '100%',
+							color:
+								direction === 'left' ? 'rgb(17 193 37)' : 'rgba(0, 0, 0, 0.85)',
 						}}
 					/>
 				</Col>
-				<Col span={16}>
+				<Col span={12}>
 					<img src={screenshot} alt='' />
 					<Webcam
 						audio={false}
@@ -99,7 +95,7 @@ const Client = (props) => {
 						videoConstraints={videoConstraints}
 					/>
 				</Col>
-				<Col span={4}>
+				<Col span={2}>
 					<CaretRightFilled
 						style={{
 							display: 'flex',
@@ -107,10 +103,16 @@ const Client = (props) => {
 							justifyContent: 'space-around',
 							fontSize: '8em',
 							height: '100%',
+							color:
+								direction === 'right'
+									? 'rgb(17 193 37)'
+									: 'rgba(0, 0, 0, 0.85)',
 						}}
 					/>
 				</Col>
-				<Col span={24}>
+				<Col span={4} />
+				<Col span={6} />
+				<Col span={12}>
 					<CaretDownFilled
 						style={{
 							display: 'flex',
@@ -118,8 +120,27 @@ const Client = (props) => {
 							justifyContent: 'space-around',
 							fontSize: '8em',
 							height: '100%',
+							color:
+								direction === 'down' ? 'rgb(17 193 37)' : 'rgba(0, 0, 0, 0.85)',
 						}}
 					/>
+				</Col>
+				<Col span={6} />
+			</Row>
+			<Row type='flex' align='middle'>
+				<Col
+					span={24}
+					style={{
+						display: 'inline-flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<p>
+						Captured Finger Direction:{' '}
+						<span style={{ color: 'rgb(253 22 22)', fontWeight: 'bolder' }}>
+							{direction}
+						</span>
+					</p>
 				</Col>
 			</Row>
 		</div>
