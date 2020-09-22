@@ -11,7 +11,7 @@ function App() {
 	const webcamOff = (
 		<div>
 			<center>
-				<span id='Number'>Webcam is off</span>
+				<span className='webcam-off'>Webcam is off</span>
 			</center>
 		</div>
 	);

@@ -54,6 +54,22 @@ const Client = (props) => {
 	}, [screenshot]);
 	return (
 		<div>
+			<Row type='flex' align='middle'>
+				<Col
+					span={24}
+					style={{
+						display: 'inline-flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+					<p>
+						Captured Finger Direction:{' '}
+						<span style={{ color: 'rgb(253 22 22)', fontWeight: 'bolder' }}>
+							{direction}
+						</span>
+					</p>
+				</Col>
+			</Row>
 			<Row>
 				<Col span={6} />
 				<Col span={12}>
@@ -126,22 +142,6 @@ const Client = (props) => {
 					/>
 				</Col>
 				<Col span={6} />
-			</Row>
-			<Row type='flex' align='middle'>
-				<Col
-					span={24}
-					style={{
-						display: 'inline-flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}>
-					<p>
-						Captured Finger Direction:{' '}
-						<span style={{ color: 'rgb(253 22 22)', fontWeight: 'bolder' }}>
-							{direction}
-						</span>
-					</p>
-				</Col>
 			</Row>
 		</div>
 	);
